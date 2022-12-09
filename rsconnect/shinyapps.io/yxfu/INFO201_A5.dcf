@@ -5,9 +5,9 @@ account: yxfu
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7824995
-bundleId: 6605714
+bundleId: 6616875
 url: https://yxfu.shinyapps.io/INFO201_A5/
-when: 1670432611.51482
-lastSyncTime: 1670432611.51483
+when: 1670610715.84766
+lastSyncTime: 1670610715.84767
 asMultiple: FALSE
 asStatic: FALSE
