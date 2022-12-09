@@ -12,31 +12,38 @@ library(dplyr)
 library(ggplot2)
 library(dplyr)
 library(plotly)
-# what to comment
-# wrangle dat
+
 data <- read.csv("owid-co2-data.csv") 
 
-  values <- data %>% select(ghg_per_capita, year) %>%
+# calculate several values for introduction
+values <- data %>% select(ghg_per_capita, year) %>%
   group_by(year) %>%
+  filter(year > 1989, year < 2020) %>%
   summarise(
     average = mean(ghg_per_capita, na.rm = TRUE), 
     maxValue = max(ghg_per_capita, na.rm = TRUE), 
     minValue= min(ghg_per_capita, na.rm = TRUE)
-    ) %>% na.omit() 
+    )
 top <- values$average[1]
 bottom <- tail(values$average, n =1)
 values <- values %>%
-  mutate(change_through_29_years = bottom - top, 
-                 maxValue_2019 = tail(values$maxValue, n = 1), 
-                 minValue_2019 = tail(values$minValue, n = 1), 
-                 average_2019 = tail(values$average, n = 1),
-         maxC_2019 = select(filter(data, year == 2019, ghg_per_capita == maxValue_2019), country), 
-         minC_2019 = select(filter(data, year == 2019, ghg_per_capita == minValue_2019), country)) %>%
-  select(average_2019, maxValue_2019, minValue_2019, maxC_2019, minC_2019, change_through_29_years) %>%
-  head(1)
-
+  filter(year == 2019) %>% 
+  mutate(change_through_29_years = bottom - top) 
+maxCoun <- data %>%
+  filter(ghg_per_capita == values$maxValue) %>%
+  pull(country)
+minCoun <- data %>%
+  filter(ghg_per_capita == values$minValue) %>%
+  pull(country)
 
 server <- function(input, output) {
+  output$avg <- renderText({round(values$average, 2)})
+  output$max <- renderText({round(values$maxValue, 2)})
+  output$min <- renderText({round(values$minValue, 2)})
+  output$diff <- renderText({round(values$change_through_29_years, 2)})
+  output$maxCoun <- renderText({maxCoun})
+  output$minCoun <- renderText({minCoun})
+  
   average_ghg <- data %>%
     group_by(year) %>%
     summarise(
@@ -53,7 +60,7 @@ server <- function(input, output) {
     minV = floor(min(data$ghg_per_capita, na.rm = T))
     maxV = ceiling(max(data$ghg_per_capita, na.rm = T))
     sliderInput("ghg", 
-                label = h3("Select countries that has a green house gas emission in a particular range"), 
+                label = h3("Select a range of green house gas emission to explore details of graph"), 
                 min = minV, 
                 max = maxV, 
                 value = c(minV, maxV))
@@ -71,6 +78,7 @@ server <- function(input, output) {
                 sep = "")
   }))
   
+  # return a dataset
   sData <- reactive({
     req(input$time)
     req(input$ghg) 
