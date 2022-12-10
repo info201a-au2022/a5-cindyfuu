@@ -113,7 +113,7 @@ server <- function(input, output) {
       geom_point(mapping = aes(stat = country, x = gdp_per_capita, y = ghg_per_capita, color = Groups)) + 
       labs(x = "GDP Per Capita(dollars per capita)", 
            y = "GHG Per Capita(tons per capita)", 
-           title = paste0("GHG over GDP for Countries in ", input$time," (Red Group = ", num1,"N, Blue Group = ", num2,"N)"))
+           title = paste0("GHG over GDP for Countries in ", input$time," (Red Group N=", num1,", Blue Group N=", num2,")"))
     ggplotly(plotPoints)
   }))
 }
