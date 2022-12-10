@@ -60,7 +60,12 @@ analysis_page <- tabPanel(
           that are clustered in the top left corner produce relatively high greenhouse gas but 
           low GDP. Countries at the bottom left corners produce low greenhouse gas emissions, but 
           these countries often are poorly developed with a stagnant economy. Some countries like 
-          Afghanistan and Rwanda are poorly developed, which result in low greenhouse gas emission.")
+          Afghanistan and Rwanda are poorly developed, which result in low greenhouse gas emission."), 
+    p("I included this chart above because it can show us how countries perform on gdp per capita 
+      and greenhouse gas per capita and help us understand if they are environmentally sustainible. It reveals
+      crucial information about countries each year and guide us to countries which 
+      are environmentall sustainable in terms of environmental protection and economy. We can therefore
+      find out what they did well in the past years and learn from them. ")
     )
   )
 )
